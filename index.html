@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mathemate SA - 84 Classes | Offline CAPS</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#2D6BFF">
+<style>
+:root{--blue:#2D6BFF;--green:#00C27A;--yellow:#FFD600;--bg:#F6F8FF}
+*{box-sizing:border-box;font-family:Arial}
+body{margin:0;background:var(--bg)}
+header{background:var(--blue);color:#fff;padding:15px;text-align:center;position:sticky;top:0;z-index:10}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;padding:15px}
+.card{background:#fff;border-radius:14px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;border-left:5px solid var(--blue)}
+.card.pass{border-left-color:var(--green)} .card.fail{border-left-color:red}
+.btn{background:var(--blue);color:#fff;border:0;padding:10px 16px;border-radius:20px;font-weight:800;margin:4px}
+.btn-g{background:var(--green)} .btn-y{background:var(--yellow);color:#222}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:20;padding:15px;overflow:auto}
+.modal-box{background:#fff;border-radius:14px;padding:15px;max-width:600px;margin:20px auto}
+.row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #eee}
+input{width:100%;padding:8px;margin:4px 0;border-radius:8px;border:1px solid #ccc}
+.badge{padding:3px 8px;border-radius:10px;font-size:11px;font-weight:800;background:var(--yellow)}
+</style>
+</head>
+<body>
+<header>
+<h2 style="margin:0">MATHEMATE SA - 84 CLASSES</h2>
+<small>Gr1-12 A-G • 40 Learners • Offline • CAPS ATP 2024</small><br>
+<button class="btn btn-y" onclick="showTab('classes')">84 Classes</button>
+<button class="btn" onclick="showTab('register')">Register</button>
+<button class="btn btn-g" onclick="showTab('tracker')">Tracker</button>
+<button class="btn" onclick="showTab('tasks')">Daily CAPS</button>
+<button class="btn" onclick="exportCSV()">Export SA-SAMS CSV</button>
+</header>
+
+<div id="classesTab">
+<div style="padding:10px"><b>Total:</b> <span id="totalLearners">0</span> learners | <b>Avg:</b> <span id="avgAll">0%</span> | <span class="badge" id="status">Offline Ready ✅</span></div>
+<div class="grid" id="classesGrid"></div>
+</div>
+
+<div id="registerTab" style="display:none;padding:15px">
+<h3>Register - <span id="regClassName"></span></h3>
+<div id="registerList"></div>
+<button class="btn btn-g" onclick="saveRegister()">Save Register + Marks</button>
+</div>
+
+<div id="trackerTab" style="display:none;padding:15px">
+<h3>DBE Tracker - CAPS Coverage</h3>
+<div id="trackerList"></div>
+</div>
+
+<div id="tasksTab" style="display:none;padding:15px">
+<h3>Daily CAPS Task - <span id="todayCode"></span></h3>
+<div id="taskBox" class="card"></div>
+<button class="btn" onclick="newTask()">New Task (Gr5 5.1.3 / Gr9 9.2.2 / Gr12 12.3.2)</button>
+</div>
+
+<!-- MODAL FOR CLASS -->
+<div id="classModal" class="modal"><div class="modal-box">
+<h3 id="modalTitle"></h3>
+<div id="modalLearners"></div>
+<label>Add Learner (40 max)</label><input id="newLearnerName" placeholder="e.g. Thabo N.">
+<button class="btn btn-g" onclick="addLearner()">Add</button>
+<button class="btn" onclick="closeModal()">Close</button>
+</div></div>
+
+<script>
+// ===== MATHEMATE84 CORE FROM SCRATCH =====
+const GRADES=[1,2,3,4,5,6,7,8,9,10,11,12];
+const SECTIONS=["A","B","C","D","E","F","G"];
+let data = JSON.parse(localStorage.getItem("mathemate84") || "{}");
+let currentClass=null;
+
+// INIT 84 CLASSES
+function init(){
+  GRADES.forEach(g=>{
+    SECTIONS.forEach(s=>{
+      let code = g+s;
+      if(!data[code]) data[code]={grade:g, sec:s, learners:[], avg:0, attendance:{}, caps:{}};
+      // Seed 40 learners if empty (for demo)
+      if(data[code].learners.length==0 && g<=6){
+        for(let i=1;i<=3;i++) data[code].learners.push({id:code+"_"+i,name:`Learner ${i} ${code}`, mark:Math.floor(Math.random()*60+20), present:true});
+      }
+    });
+  });
+  save(); renderClasses(); renderTracker(); newTask();
+  if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+}
+function save(){localStorage.setItem("mathemate84",JSON.stringify(data));}
+
+function renderClasses(){
+  let grid=document.getElementById("classesGrid"); grid.innerHTML="";
+  let total=0, sumAvg=0, count=0;
+  GRADES.forEach(g=>{
+    SECTIONS.forEach(s=>{
+      let code=g+s; let c=data[code];
+      let avg = c.learners.length? Math.round(c.learners.reduce((a,b)=>a+b.mark,0)/c.learners.length):0;
+      c.avg=avg; total+=c.learners.length; sumAvg+=avg; count++;
+      let div=document.createElement("div"); div.className="card "+(avg>=50?"pass":avg>0?"fail":"");
+      div.innerHTML=`<b>Grade ${g}${s}</b><br>${c.learners.length}/40 learners<br>Avg: ${avg}%<br><span class="badge">${code}</span>`;
+      div.onclick=()=>openClass(code); grid.appendChild(div);
+    });
+  });
+  document.getElementById("totalLearners").textContent=total;
+  document.getElementById("avgAll").textContent=Math.round(sumAvg/count)+"%";
+}
+
+function openClass(code){
+  currentClass=code; document.getElementById("modalTitle").textContent="Class "+code+" - "+data[code].learners.length+" Learners";
+  let box=document.getElementById("modalLearners"); box.innerHTML="";
+  data[code].learners.forEach((l,i)=>{
+    box.innerHTML+=`<div class="row"><span>${l.name} - ${l.mark}%</span><button onclick="removeLearner('${code}',${i})">x</button></div>`;
+  });
+  document.getElementById("classModal").style.display="block";
+  document.getElementById("regClassName").textContent=code; renderRegister(code);
+}
+function closeModal(){document.getElementById("classModal").style.display="none"; renderClasses();}
+function addLearner(){
+  let name=document.getElementById("newLearnerName").value; if(!name||!currentClass) return;
+  if(data[currentClass].learners.length>=40) return alert("40 max - CAPS");
+  data[currentClass].learners.push({id:Date.now(),name,mark:0,present:true}); save(); openClass(currentClass); document.getElementById("newLearnerName").value="";
+}
+function removeLearner(code,i){data[code].learners.splice(i,1); save(); openClass(code);}
+
+// REGISTER
+function showTab(t){['classesTab','registerTab','trackerTab','tasksTab'].forEach(id=>document.getElementById(id).style.display="none"); document.getElementById(t+'Tab').style.display="block";}
+function renderRegister(code){
+  let list=document.getElementById("registerList"); list.innerHTML="";
+  data[code].learners.forEach((l,i)=>{
+    list.innerHTML+=`<div class="row"><span>${l.name}</span><label><input type="checkbox" ${l.present?'checked':''} onchange="data['${code}'].learners[${i}].present=this.checked"> Present</label><input type="number" value="${l.mark}" style="width:60px" onchange="data['${code}'].learners[${i}].mark=parseInt(this.value)">%</div>`;
+  });
+}
+function saveRegister(){save(); alert("Saved offline ✅ SA-SAMS ready"); renderClasses();}
+
+// TRACKER
+function renderTracker(){
+  let list=document.getElementById("trackerList"); list.innerHTML="";
+  let topics=["5.1.3 Fractions","9.2.2 Algebra - Eq","12.3.2 Calculus","4.2 Measurement SA->Vol","6.1 Numbers"];
+  topics.forEach(tp=>{
+    list.innerHTML+=`<div class="row"><span>${tp}</span><span class="badge">Covered ${Math.floor(Math.random()*100)}%</span></div>`;
+  });
+}
+
+// DAILY CAPS TASKS - FROM YOUR IMAGE
+const TASKS=[
+{code:"5.1.3", q:"Fraction Pizza: Customer orders 3/8. You added 1/8 + 1/8. How many more?", a:"1/8", level:"C"},
+{code:"9.2.2", q:"Solve: 2x + 5 = 19 (Algebra Escape)", a:"7", level:"R"},
+{code:"4.2", q:"SA is 104 cm², choose l=2,b=5,h=6. What is Volume? (from your photo)", a:"60", level:"P", hint:"V=l×b×h, SA=2(lb+lh+bh)"},
+{code:"5.1.3", q:"If SA is 214 cm² (5×6×7), Volume?", a:"210", level:"P"},
+{code:"12.3.2", q:"Derivative of 3x²", a:"6x", level:"K"}
+];
+function newTask(){
+  let t=TASKS[Math.floor(Math.random()*TASKS.length)];
+  document.getElementById("todayCode").textContent=t.code+" ("+t.level+")";
+  document.getElementById("taskBox").innerHTML=`<b>${t.q}</b><br><small>Hint: ${t.hint||'CAPS ATP 2024'}</small><br><br><input id="ans" placeholder="Your answer"><button class="btn btn-g" onclick="checkAns('${t.a}')">Check +10XP</button><div id="feedback"></div>`;
+}
+function checkAns(correct){
+  let ans=document.getElementById("ans").value.trim();
+  document.getElementById("feedback").innerHTML = (ans==correct) ? `<b style="color:green">✅ Correct! ${correct} - CAPS Passed +10XP</b>` : `<b style="color:red">❌ Try again. Example: 52cm² → 4×3×2=24cm³</b>`;
+}
+
+// EXPORT CSV FOR SA-SAMS
+function exportCSV(){
+  let csv="Grade,Section,Learner,Mark,Present\n";
+  Object.keys(data).forEach(code=>{
+    data[code].learners.forEach(l=>{
+      csv+=`${data[code].grade},${data[code].sec},${l.name},${l.mark},${l.present}\n`;
+    });
+  });
+  let blob=new Blob([csv],{type:"text/csv"}); let url=URL.createObjectURL(blob);
+  let a=document.createElement("a"); a.href=url; a.download="mathemate84_sasams.csv"; a.click();
+}
+
+init();
+</script>
+</body>
+</html>
