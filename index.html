@@ -3,162 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mathemate SA PRO V3 - License</title>
+<title>Mathemate SA V4 - Term Marks</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#2D6BFF">
 <style>
 :root{--blue:#2D6BFF;--green:#00C27A;--yellow:#FFD600;--bg:#F6F8FF;--red:#FF3B30}
 *{box-sizing:border-box;font-family:Arial} body{margin:0;background:var(--bg)}
-header{background:var(--blue);color:#fff;padding:12px;text-align:center;position:sticky;top:0;z-index:10}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px;padding:12px}
-.card{background:#fff;border-radius:14px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,.1);cursor:pointer;border-left:6px solid var(--blue)}
-.card.pass{border-left-color:var(--green)} .card.fail{border-left-color:var(--red)}
-.btn{background:var(--blue);color:#fff;border:0;padding:9px 14px;border-radius:20px;font-weight:800;margin:3px;font-size:13px;cursor:pointer}
+header{background:var(--blue);color:#fff;padding:10px;text-align:center;position:sticky;top:0;z-index:10}
+.card{background:#fff;border-radius:12px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);margin:6px 0}
+.btn{background:var(--blue);color:#fff;border:0;padding:8px 12px;border-radius:18px;font-weight:800;margin:2px;font-size:12px}
 .btn-g{background:var(--green)} .btn-y{background:var(--yellow);color:#222} .btn-r{background:var(--red)}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:30;padding:10px;overflow:auto}
-.modal-box{background:#fff;border-radius:14px;padding:14px;max-width:650px;margin:20px auto}
-.row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #eee;gap:6px}
-input{padding:10px;border-radius:8px;border:1px solid #ccc;width:100%;margin:4px 0}
-.badge{padding:3px 8px;border-radius:10px;font-size:11px;font-weight:800;background:var(--yellow)}
-.stat{background:#fff;padding:12px;border-radius:12px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.1)}
-.dash{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px}
-.paywall{background:linear-gradient(135deg,#2D6BFF,#00C27A);color:#fff;padding:20px;border-radius:14px;text-align:center}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:8px}
+.class-card{border-left:6px solid var(--blue);cursor:pointer}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:30;overflow:auto;padding:8px}
+.modal-box{background:#fff;border-radius:14px;padding:12px;max-width:900px;margin:10px auto}
+.term-input{width:52px;padding:8px;border-radius:8px;border:1px solid #ccc;text-align:center;font-weight:800}
+.row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee;gap:4px;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse} th{background:var(--blue);color:#fff;padding:8px;font-size:11px} td{padding:4px;border:1px solid #ddd;font-size:12px}
+.avg-high{color:var(--green);font-weight:900} .avg-low{color:var(--red);font-weight:900}
 </style>
 </head>
 <body>
 <header>
-<div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">
-<input id="schoolName" placeholder="School Name e.g. Thaba Primary" style="max-width:260px" onchange="saveSchool()">
-<button class="btn btn-y" onclick="saveSchool()">Save</button>
-<input id="licenseInput" placeholder="License Key MATHEMATE84-PRO-..." style="max-width:260px">
-<button class="btn btn-g" onclick="activateLicense()">Unlock PRO</button>
-</div>
-<h3 style="margin:8px 0">MATHEMATE SA V3 - <span id="schoolLabel">My School</span> <span id="proBadge" style="background:#FFD600;color:#000;padding:2px 8px;border-radius:10px;font-size:12px">FREE</span></h3>
-<small>Gr1-12 A-G • 40 Learners • Offline • CAPS • <span id="licenseStatus">Free - 5 learners max</span></small><br>
-<div style="margin-top:8px">
+<input id="schoolName" placeholder="School Name" style="padding:10px;border-radius:8px;border:0;max-width:240px;width:70%">
+<button class="btn btn-y" onclick="saveSchool()">Save School</button><br>
+<div style="margin:6px 0"><input id="licenseInput" placeholder="MATHEMATE84-PRO-..." style="padding:8px;border-radius:8px;border:0;max-width:220px"><button class="btn btn-g" onclick="activateLicense()">Unlock</button> <span id="proBadge" style="background:#FFD600;color:#000;padding:3px 8px;border-radius:10px;font-size:11px">FREE</span></div>
+<h3 style="margin:4px 0">MATHEMATE SA V4 - <span id="schoolLabel">My School</span> - TERM MARKS</h3>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
 <button class="btn btn-y" onclick="showTab('classes')">84 Classes</button>
+<button class="btn" onclick="showTab('term')" style="background:#FFD600;color:#222">📊 Term Marks</button>
 <button class="btn" onclick="showTab('dash')">Principal Dash</button>
 <button class="btn" onclick="showTab('register')">Register</button>
 <button class="btn" onclick="showTab('tracker')">Tracker</button>
-<button class="btn" onclick="showTab('tasks')">Daily CAPS</button>
 </div>
-<button class="btn" onclick="exportCSV()">Export SA-SAMS CSV</button>
+<div style="margin-top:6px"><button class="btn" onclick="exportTermCSV()">Export Term Marks CSV</button> <button class="btn btn-g" onclick="exportSAMS()">Export SA-SAMS</button></div>
 </header>
 
-<div id="classesTab">
-<div style="padding:10px"><b>Total:</b> <span id="totalLearners">0</span> | <b>Avg:</b> <span id="avgAll">0%</span> | <b>Pass:</b> <span id="passRate">0%</span> | <span class="badge" id="offlineBadge">Offline Ready ✅</span></div>
-<div class="grid" id="classesGrid"></div>
-</div>
-<div id="dashTab" style="display:none"><div class="dash"><div class="stat"><h3 id="dTotal">0</h3><small>Total Learners</small></div><div class="stat"><h3 id="dAvg">0%</h3><small>School Avg</small></div><div class="stat"><h3 id="dAtRisk">0</h3><small>At Risk</small></div></div><div style="padding:12px"><div id="dashList"></div><h4>Top 5</h4><div id="topClasses"></div><h4>Needs Support</h4><div id="riskClasses"></div><button class="btn btn-g" onclick="whatsappPrincipal()">WhatsApp Principal Report</button></div></div>
-<div id="registerTab" style="display:none;padding:12px"><h3>Register - <span id="regClassName">Select class</span></h3><div id="registerList"></div><button class="btn btn-g" onclick="saveRegister()">Save</button><button class="btn btn-y" onclick="whatsappClass()">WhatsApp Class Summary</button></div>
-<div id="trackerTab" style="display:none;padding:12px"><h3>DBE Tracker</h3><div id="trackerList"></div></div>
-<div id="tasksTab" style="display:none;padding:12px"><h3>Daily CAPS - <span id="todayCode"></span></h3><div id="taskBox" class="card"></div><button class="btn" onclick="newTask()">New Task</button></div>
+<div id="classesTab"><div style="padding:8px;font-size:13px"><b id="totalLearners">0</b> learners | <b id="avgAll">0%</b> final avg | <b id="promoRate">0% promoted</b> | <span id="termInfo">Term 1-4 capturing</span></div><div class="grid" id="classesGrid"></div></div>
 
-<div id="classModal" class="modal"><div class="modal-box"><h3 id="modalTitle"></h3><div id="modalLearners"></div><label>Name</label><input id="newLearnerName" placeholder="Thabo N."><label>Mark %</label><input id="newLearnerMark" type="number" placeholder="65"><button class="btn btn-g" onclick="addLearner()">Add (40 max)</button><button class="btn btn-r" onclick="closeModal()">Close</button></div></div>
+<div id="termTab" style="display:none;padding:10px">
+<h3>📊 Term Marks Capturing - <span id="termClassName">Select class</span></h3>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0">
+<button class="btn btn-y" onclick="setActiveTerm(1)">Term 1</button>
+<button class="btn btn-y" onclick="setActiveTerm(2)">Term 2</button>
+<button class="btn btn-y" onclick="setActiveTerm(3)">Term 3</button>
+<button class="btn btn-y" onclick="setActiveTerm(4)">Term 4</button>
+<button class="btn btn-g" onclick="setActiveTerm('final')">Final</button>
+<span class="card" style="padding:6px 10px">Active: <b id="activeTermLabel">Term 1</b> | Quick type + Tab to next</span>
+</div>
+<div class="card" style="overflow:auto"><table id="termTable"><thead><tr><th>#</th><th>Learner</th><th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>Final</th><th>Avg</th><th>DBE</th><th>WA</th></tr></thead><tbody id="termTableBody"></tbody></table></div>
+<button class="btn btn-g" onclick="saveAllTerms()">💾 Save All Terms Offline</button> <button class="btn" onclick="whatsappTermReport()">WhatsApp Term Report</button>
+<div class="card"><b>DBE Promotion:</b> ≥40% = Promoted, 30-39% = Progressed, <30% = Retained | Final = (T1+T2+T3+T4)/4 | CAPS ATP 2024</div>
+</div>
 
-<!-- PAYWALL MODAL - MONEY FEATURE -->
-<div id="payModal" class="modal"><div class="modal-box">
-<div class="paywall">
-<h2>🔒 Unlock 84 Classes PRO</h2>
-<p>You reached 5 learners free limit. Unlock full 84 classes + WhatsApp Parents + Principal Dash.</p>
-<h3>R2,500 once-off - Lifetime license</h3>
-<p><b>School:</b> <span id="paySchoolName">My School</span></p>
-<button class="btn btn-y" style="padding:12px 20px;font-size:16px" onclick="payWithPaystack()">💳 Pay with Paystack</button><br><br>
-<small>After payment, WhatsApp Vusi 082 xxx xxxx with school name, get license key in 5 min</small>
-<div style="background:#fff;color:#222;border-radius:10px;padding:10px;margin-top:12px">
-<label>Have License Key? Enter here:</label>
-<input id="payLicenseInput" placeholder="MATHEMATE84-PRO-...">
-<button class="btn btn-g" onclick="activateFromPaywall()">Unlock Now</button>
-</div>
-<button class="btn" onclick="closePayModal()">Continue Free (5 learners)</button>
-</div>
+<div id="dashTab" style="display:none;padding:10px"><div id="dashContent"></div><button class="btn btn-g" onclick="whatsappPrincipal()">WhatsApp Principal - Term Report</button></div>
+<div id="registerTab" style="display:none;padding:10px"><h3>Register - <span id="regClassName">-</span></h3><div id="registerList"></div></div>
+<div id="trackerTab" style="display:none;padding:10px"><h3>ATP Tracker 2024</h3><div id="trackerList"></div></div>
+
+<div id="classModal" class="modal"><div class="modal-box"><h3 id="modalTitle"></h3>
+<div style="display:flex;gap:6px;margin:8px 0"><input id="newLearnerName" placeholder="Learner Full Name" style="flex:1"><button class="btn btn-g" onclick="addLearner()">Add 40 max</button><button class="btn btn-r" onclick="closeModal()">X</button></div>
+<div id="modalLearners"></div>
 </div></div>
 
 <script>
-const GRADES=[1,2,3,4,5,6,7,8,9,10,11,12]; const SECTIONS=["A","B","C","D","E","F","G"];
-let data=JSON.parse(localStorage.getItem("mathemate84_v3")||"{}");
+const GRADES=[1,2,3,4,5,6,7,8,9,10,11,12], SECTIONS=["A","B","C","D","E","F","G"];
+let data=JSON.parse(localStorage.getItem("mathemate84_v4")||localStorage.getItem("mathemate84_v3")||"{}");
 let school=localStorage.getItem("schoolName")||"My School";
-let license=localStorage.getItem("proLicense")||"";
-let isPro=false;
-let currentClass=null;
+let license=localStorage.getItem("proLicense")||"", isPro=false, currentClass=null, activeTerm=1;
 
 function init(){
-  document.getElementById("schoolName").value=school; document.getElementById("schoolLabel").textContent=school;
-  checkLicense();
-  GRADES.forEach(g=>{SECTIONS.forEach(s=>{let code=g+s; if(!data[code]) data[code]={grade:g,sec:s,learners:[],avg:0};});});
-  save(); renderClasses(); renderDash(); renderTracker(); newTask();
-  if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+ document.getElementById("schoolName").value=school; document.getElementById("schoolLabel").textContent=school;
+ checkLicense(); migrateV3toV4();
+ GRADES.forEach(g=>SECTIONS.forEach(s=>{let code=g+s; if(!data[code]) data[code]={grade:g,sec:s,learners:[],avg:0};}));
+ save(); renderClasses(); renderDash(); renderTracker();
+ if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 }
-function save(){localStorage.setItem("mathemate84_v3",JSON.stringify(data));}
-function saveSchool(){school=document.getElementById("schoolName").value||"My School"; localStorage.setItem("schoolName",school); document.getElementById("schoolLabel").textContent=school; document.getElementById("paySchoolName").textContent=school; alert("Saved: "+school);}
+function migrateV3toV4(){
+ // old mark -> T1
+ Object.keys(data).forEach(code=>{
+   data[code].learners.forEach(l=>{
+     if(l.mark!==undefined && !l.terms){ l.terms={T1:l.mark||0,T2:0,T3:0,T4:0,final:0}; l.present=true; delete l.mark; }
+     if(!l.terms) l.terms={T1:0,T2:0,T3:0,T4:0,final:0};
+   });
+ });
+}
+function save(){localStorage.setItem("mathemate84_v4",JSON.stringify(data));}
+function saveSchool(){school=document.getElementById("schoolName").value||"My School"; localStorage.setItem("schoolName",school); document.getElementById("schoolLabel").textContent=school; alert("Saved: "+school);}
+function checkLicense(){isPro=license.startsWith("MATHEMATE84-PRO-")||license==="PRO-2026-VUSI"; document.getElementById("proBadge").textContent=isPro?"PRO UNLOCKED ✅":"FREE - 5 max"; document.getElementById("proBadge").style.background=isPro?"#00C27A":"#FFD600"; document.getElementById("licenseInput").value=license;}
+function activateLicense(){let k=document.getElementById("licenseInput").value.trim(); if(k.startsWith("MATHEMATE84-PRO-")||k==="PRO-2026-VUSI"){localStorage.setItem("proLicense",k); license=k; checkLicense(); alert("✅ PRO Unlocked V4 Term Marks"); renderClasses();}else alert("Invalid key");}
 
-// LICENSE SYSTEM - OFFLINE VALIDATION
-function checkLicense(){
-  isPro = license.startsWith("MATHEMATE84-PRO-") || license.startsWith("MATH-") || license==="PRO-2026-VUSI";
-  document.getElementById("proBadge").textContent=isPro?"PRO UNLOCKED ✅":"FREE";
-  document.getElementById("proBadge").style.background=isPro?"#00C27A":"#FFD600";
-  document.getElementById("proBadge").style.color=isPro?"#fff":"#000";
-  document.getElementById("licenseStatus").textContent=isPro?"License Active - 84 Classes Unlimited":"Free - 5 learners max - Pay to unlock";
-  document.getElementById("licenseInput").value=license;
-}
-function activateLicense(){
-  let key=document.getElementById("licenseInput").value.trim(); if(!key) return alert("Enter key");
-  if(key.startsWith("MATHEMATE84-PRO-")||key==="PRO-2026-VUSI"){localStorage.setItem("proLicense",key); license=key; checkLicense(); alert("✅ PRO Unlocked! 84 Classes active for "+school); closePayModal(); renderClasses();}
-  else alert("❌ Invalid key. Pay R2,500 to get valid key. WhatsApp: 082 xxx xxxx");
-}
-function activateFromPaywall(){let key=document.getElementById("payLicenseInput").value.trim(); document.getElementById("licenseInput").value=key; activateLicense();}
-function countTotal(){let t=0; Object.keys(data).forEach(k=>t+=data[k].learners.length); return t;}
+function getLearnerFinal(l){let t=l.terms; let vals=[t.T1,t.T2,t.T3,t.T4].filter(v=>v>0); if(vals.length==0) return 0; if(t.final>0) return t.final; return Math.round(vals.reduce((a,b)=>a+b,0)/vals.length);}
+function getDBEStatus(avg){if(avg>=40) return "Promoted"; if(avg>=30) return "Progressed"; return "Retained";}
+function countTotal(){let c=0; Object.keys(data).forEach(k=>c+=data[k].learners.length); return c;}
 function needPaywall(){return !isPro && countTotal()>=5;}
 
 function renderClasses(){
-  let grid=document.getElementById("classesGrid"); grid.innerHTML=""; let total=0,sum=0,count=0,pass=0;
-  GRADES.forEach(g=>{SECTIONS.forEach(s=>{
-    let code=g+s; let c=data[code]; let avg=c.learners.length?Math.round(c.learners.reduce((a,b)=>a+b.mark,0)/c.learners.length):0; c.avg=avg;
-    if(c.learners.length>0){total+=c.learners.length; sum+=avg; count++; if(avg>=50) pass++;}
-    let div=document.createElement("div"); div.className="card "+(avg>=50&&c.learners.length?"pass":avg>0&&avg<50?"fail":"");
-    div.innerHTML=`<b>Gr ${g}${s}</b><br>${c.learners.length}/40<br>Avg: ${c.learners.length?avg+'%':'-'}<br><span class="badge">${code}</span>`;
-    div.onclick=()=>openClass(code); grid.appendChild(div);
-  });});
-  document.getElementById("totalLearners").textContent=total; document.getElementById("avgAll").textContent=count?Math.round(sum/count)+"%":"0%"; document.getElementById("passRate").textContent=count?Math.round(pass/count*100)+"%":"0%";
+ let grid=document.getElementById("classesGrid"); grid.innerHTML=""; let total=0, sum=0, count=0, promoted=0;
+ GRADES.forEach(g=>SECTIONS.forEach(s=>{
+  let code=g+s, c=data[code];
+  let classAvg=c.learners.length?Math.round(c.learners.reduce((a,b)=>a+getLearnerFinal(b),0)/c.learners.length):0;
+  c.avg=classAvg; if(c.learners.length){total+=c.learners.length; sum+=classAvg; count++; if(classAvg>=40) promoted++;}
+  let d=document.createElement("div"); d.className="card class-card"; d.innerHTML=`<b>Gr ${g}${s}</b><br>${c.learners.length}/40<br>Final Avg: ${c.learners.length?classAvg+'%':'-'}<br><span style="background:#FFD600;padding:2px 8px;border-radius:10px;font-size:11px">${code}</span> <small>${c.learners.length?getDBEStatus(classAvg):''}</small>`;
+  d.onclick=()=>openClass(code); grid.appendChild(d);
+ }));
+ document.getElementById("totalLearners").textContent=total; document.getElementById("avgAll").textContent=count?Math.round(sum/count)+"%":"0%"; document.getElementById("promoRate").textContent=count?Math.round(promoted/count*100)+"% promoted":"0%";
 }
 function openClass(code){
-  currentClass=code; let c=data[code]; document.getElementById("modalTitle").textContent=`${school} - Class ${code} - ${c.learners.length}/40`;
-  let box=document.getElementById("modalLearners"); box.innerHTML="";
-  c.learners.forEach((l,i)=>{box.innerHTML+=`<div class="row"><span>${l.name} (${l.mark}%)</span><div style="display:flex;gap:4px"><button class="btn" onclick="whatsappParent('${code}',${i})">WhatsApp Parent</button><button class="btn btn-r" onclick="removeLearner('${code}',${i})">x</button></div></div>`;});
-  document.getElementById("classModal").style.display="block"; document.getElementById("regClassName").textContent=code; renderRegister(code);
+ currentClass=code; let c=data[code]; document.getElementById("modalTitle").textContent=`${school} - Class ${code} - ${c.learners.length}/40 - Final Avg ${c.avg}%`;
+ let box=document.getElementById("modalLearners"); box.innerHTML=c.learners.map((l,i)=>{let f=getLearnerFinal(l); return `<div class="row"><span>${i+1}. ${l.name} - T1:${l.terms.T1} T2:${l.terms.T2} T3:${l.terms.T3} T4:${l.terms.T4} Final:${f}% ${getDBEStatus(f)}</span><div><button class="btn" onclick="editTerms('${code}',${i})">Edit Terms</button><button class="btn btn-r" onclick="removeLearner('${code}',${i})">x</button></div></div>`}).join("")||"No learners - Add above";
+ document.getElementById("classModal").style.display="block"; document.getElementById("termClassName").textContent=code; document.getElementById("regClassName").textContent=code; renderTermTable(code); renderRegister(code);
 }
 function closeModal(){document.getElementById("classModal").style.display="none"; renderClasses(); renderDash();}
 function addLearner(){
-  if(needPaywall()){document.getElementById("paySchoolName").textContent=school; document.getElementById("payModal").style.display="block"; return;}
-  let name=document.getElementById("newLearnerName").value, mark=parseInt(document.getElementById("newLearnerMark").value)||0;
-  if(!name||!currentClass) return; if(data[currentClass].learners.length>=40) return alert("40 max");
-  data[currentClass].learners.push({id:Date.now(),name,mark,present:true}); save(); openClass(currentClass); document.getElementById("newLearnerName").value=""; document.getElementById("newLearnerMark").value="";
-  if(needPaywall()){setTimeout(()=>{document.getElementById("payModal").style.display="block";},500);}
+ if(needPaywall()) return alert("Free limit 5 learners. Unlock PRO with license key.");
+ let name=document.getElementById("newLearnerName").value.trim(); if(!name||!currentClass) return;
+ if(data[currentClass].learners.length>=40) return alert("40 max");
+ data[currentClass].learners.push({id:Date.now(),name,terms:{T1:0,T2:0,T3:0,T4:0,final:0},present:true}); save(); document.getElementById("newLearnerName").value=""; openClass(currentClass);
 }
 function removeLearner(code,i){data[code].learners.splice(i,1); save(); openClass(code);}
-function showTab(t){['classesTab','dashTab','registerTab','trackerTab','tasksTab'].forEach(id=>document.getElementById(id).style.display="none"); document.getElementById(t+'Tab').style.display="block";}
-function renderRegister(code){let list=document.getElementById("registerList"); list.innerHTML=""; data[code].learners.forEach((l,i)=>{list.innerHTML+=`<div class="row"><span>${l.name}</span><label><input type="checkbox" ${l.present?'checked':''} onchange="data['${code}'].learners[${i}].present=this.checked"> Present</label><input type="number" value="${l.mark}" style="width:70px" onchange="data['${code}'].learners[${i}].mark=parseInt(this.value)"><button class="btn" onclick="whatsappParent('${code}',${i})">WA Parent</button></div>`;});}
-function saveRegister(){save(); alert("Saved offline ✅"); renderClasses(); renderDash();}
-function renderDash(){let total=0,sum=0,count=0,atRisk=0,arr=[]; Object.keys(data).forEach(code=>{let c=data[code]; if(c.learners.length){total+=c.learners.length; sum+=c.avg; count++; if(c.avg<50) atRisk++; arr.push({code,avg:c.avg,count:c.learners.length});}}); document.getElementById("dTotal").textContent=total; document.getElementById("dAvg").textContent=count?Math.round(sum/count)+"%":"0%"; document.getElementById("dAtRisk").textContent=atRisk; arr.sort((a,b)=>b.avg-a.avg); document.getElementById("topClasses").innerHTML=arr.slice(0,5).map(x=>`<div class="row"><span>${x.code} - ${x.avg}% (${x.count})</span><span class="badge">TOP</span></div>`).join("")||"No data"; document.getElementById("riskClasses").innerHTML=arr.filter(x=>x.avg<50).map(x=>`<div class="row"><span>${x.code} - ${x.avg}%</span><span style="background:var(--red);color:#fff;padding:3px 8px;border-radius:10px">Support</span></div>`).join("")||"All passing ✅"; document.getElementById("dashList").innerHTML=`<div class="card">School: <b>${school}</b> | Active: ${count}/84 | Pass: ${count?Math.round(arr.filter(x=>x.avg>=50).length/count*100):0}% | License: ${isPro?'PRO ✅':'FREE'}</div>`;}
-function whatsappParent(code,i){let l=data[code].learners[i]; let msg=`Dear Parent, ${school} - Grade ${code}: ${l.name} - Maths: ${l.mark}% - Attendance: ${l.present?'Present':'Absent'} - Term avg: ${data[code].avg}% - Mathemate SA PRO`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');}
-function whatsappClass(){if(!currentClass) return alert("Select class"); let c=data[currentClass]; let msg=`${school} - Class ${currentClass} Report: Avg ${c.avg}% - Total ${c.learners.length} learners - ${c.learners.filter(l=>l.mark<50).length} need support - Mathemate SA PRO`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');}
-function whatsappPrincipal(){let total=0,sum=0,count=0; Object.keys(data).forEach(k=>{if(data[k].learners.length){total+=data[k].learners.length; sum+=data[k].avg; count++;}}); let msg=`*${school} - Principal Report*%0ATotal: ${total}%0AAvg: ${count?Math.round(sum/count):0}%25%0AClasses: ${count}/84%0ALicense: ${isPro?'PRO ✅':'FREE'}%0A${location.href}`; window.open(`https://wa.me/?text=${msg}`,'_blank');}
-function renderTracker(){document.getElementById("trackerList").innerHTML=["5.1.3 Fractions","9.2.2 Algebra Eq","12.3.2 Calculus","4.2 SA->Volume","6.1 Numbers"].map(tp=>`<div class="row"><span>${tp}</span><span class="badge">Covered</span></div>`).join("");}
-const TASKS=[{code:"5.1.3",q:"Fraction Pizza: Order 3/8. You added 1/8+1/8. How many more?",a:"1/8"},{code:"4.2",q:"SA 104 cm², l=2,b=5,h=6. Volume? (Your photo)",a:"60"},{code:"9.2.2",q:"Solve: 2x+5=19",a:"7"},{code:"SA 214",q:"SA 214cm² (5×6×7) Volume?",a:"210"},{code:"12.3.2",q:"Derivative 3x²",a:"6x"}];
-function newTask(){let t=TASKS[Math.floor(Math.random()*TASKS.length)]; document.getElementById("todayCode").textContent=t.code; document.getElementById("taskBox").innerHTML=`<b>${t.q}</b><br><br><input id="ans" placeholder="Answer"><button class="btn btn-g" onclick="checkAns('${t.a}')">Check +10XP</button><div id="feedback"></div>`;}
-function checkAns(c){let ans=document.getElementById("ans").value.trim(); document.getElementById("feedback").innerHTML=ans==c?`<b style="color:green">✅ Correct! ${c}</b>`:`<b style="color:red">❌ Try again</b>`;}
-function exportCSV(){let csv="School,Grade,Section,Learner,Mark,Present,License\n"; Object.keys(data).forEach(code=>{data[code].learners.forEach(l=>{csv+=`${school},${data[code].grade},${data[code].sec},${l.name},${l.mark},${l.present},${isPro?'PRO':'FREE'}\n`;});}); let blob=new Blob([csv],{type:"text/csv"}); let a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`${school}_mathemate84_${isPro?'PRO':'FREE'}.csv`; a.click();}
-function closePayModal(){document.getElementById("payModal").style.display="none";}
+function editTerms(code,i){showTab('term'); renderTermTable(code); setTimeout(()=>{document.getElementById(`t1_${i}`)?.focus();},100);}
+function showTab(t){['classesTab','termTab','dashTab','registerTab','trackerTab'].forEach(id=>document.getElementById(id).style.display="none"); document.getElementById(t+'Tab').style.display="block";}
 
-// PAYSTACK - CHANGE THIS LINK TO YOUR PAYSTACK PAYMENT LINK
-function payWithPaystack(){
-  // TODO: Replace with your Paystack payment link
-  let payLink = "https://paystack.com/pay/mathemate84-pro"; // <-- CREATE THIS IN PAYSTACK DASHBOARD
-  let ref = school.replace(/\s/g,'')+"-"+Date.now();
-  // If you have Paystack inline JS, use it, else open link
-  window.open(payLink + "?ref=" + ref + "&school=" + encodeURIComponent(school), "_blank");
-  alert("After payment, WhatsApp proof to 082 xxx xxxx. You'll get key: MATHEMATE84-PRO-"+ref.slice(-6)+" in 5 minutes");
+// TERM MARKS TABLE - FAST CAPTURING
+function setActiveTerm(term){activeTerm=term; document.getElementById("activeTermLabel").textContent=term==='final'?'Final':`Term ${term}`;}
+function renderTermTable(code){
+ if(!code) code=currentClass; if(!code) return;
+ let c=data[code], tbody=document.getElementById("termTableBody"); tbody.innerHTML="";
+ c.learners.forEach((l,i)=>{
+   let f=getLearnerFinal(l), status=getDBEStatus(f);
+   tbody.innerHTML+=`<tr><td>${i+1}</td><td><b>${l.name}</b></td>
+   <td><input class="term-input" id="t1_${i}" type="number" min="0" max="100" value="${l.terms.T1}" onchange="updateTerm('${code}',${i},'T1',this.value)" onkeydown="if(event.key==='Enter'){document.getElementById('t2_${i}')?.focus()}"></td>
+   <td><input class="term-input" id="t2_${i}" type="number" value="${l.terms.T2}" onchange="updateTerm('${code}',${i},'T2',this.value)" onkeydown="if(event.key==='Enter'){document.getElementById('t3_${i}')?.focus()}"></td>
+   <td><input class="term-input" id="t3_${i}" type="number" value="${l.terms.T3}" onchange="updateTerm('${code}',${i},'T3',this.value)"></td>
+   <td><input class="term-input" id="t4_${i}" type="number" value="${l.terms.T4}" onchange="updateTerm('${code}',${i},'T4',this.value)"></td>
+   <td><input class="term-input" id="tf_${i}" type="number" value="${l.terms.final}" placeholder="auto" onchange="updateTerm('${code}',${i},'final',this.value)"></td>
+   <td class="${f>=40?'avg-high':'avg-low'}">${f}%</td><td>${status}</td><td><button class="btn" onclick="whatsappLearnerTerm('${code}',${i})">WA</button></td></tr>`;
+ });
 }
+function updateTerm(code,i,term,val){
+ let v=parseInt(val)||0; if(v>100) v=100; if(term==='final') data[code].learners[i].terms.final=v; else data[code].learners[i].terms[term]=v;
+ save(); renderTermTable(code); renderClasses();
+}
+function saveAllTerms(){save(); alert("✅ All Term Marks saved offline - SA-SAMS ready"); renderClasses(); renderDash();}
+function whatsappLearnerTerm(code,i){let l=data[code].learners[i], f=getLearnerFinal(l); let msg=`${school} - ${code}: ${l.name} - T1:${l.terms.T1}% T2:${l.terms.T2}% T3:${l.terms.T3}% T4:${l.terms.T4}% Final:${f}% - ${getDBEStatus(f)} - Mathemate SA V4`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');}
+function whatsappTermReport(){if(!currentClass) return alert("Select class"); let c=data[currentClass]; let msg=`*${school} - ${currentClass} Term Report*%0A`; c.learners.slice(0,20).forEach(l=>{let f=getLearnerFinal(l); msg+=`${l.name}: T1 ${l.terms.T1} T2 ${l.terms.T2} T3 ${l.terms.T3} T4 ${l.terms.T4} Final ${f}% - ${getDBEStatus(f)}%0A`;}); window.open(`https://wa.me/?text=${msg}`,'_blank');}
+
+function renderDash(){
+ let total=0,sum=0,count=0,promoted=0,arr=[]; Object.keys(data).forEach(code=>{let c=data[code]; if(c.learners.length){let avg=c.avg; total+=c.learners.length; sum+=avg; count++; if(avg>=40) promoted++; arr.push({code,avg,count:c.learners.length});}});
+ arr.sort((a,b)=>b.avg-a.avg);
+ document.getElementById("dashContent").innerHTML=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><div class="card" style="text-align:center"><h2>${total}</h2><small>Learners</small></div><div class="card" style="text-align:center"><h2>${count?Math.round(sum/count):0}%</h2><small>Final Avg</small></div><div class="card" style="text-align:center"><h2>${count?Math.round(promoted/count*100):0}%</h2><small>Promoted</small></div></div>
+ <h4>Top Classes</h4>${arr.slice(0,5).map(x=>`<div class="row"><span>${school} ${x.code} - ${x.avg}% (${x.count})</span><span>${getDBEStatus(x.avg)}</span></div>`).join("")||"No data"}
+ <h4>Needs Support <30%</h4>${arr.filter(x=>x.avg<30).map(x=>`<div class="row"><span>${x.code} - ${x.avg}%</span><span style="background:#FF3B30;color:#fff;padding:3px 8px;border-radius:10px">Retained</span></div>`).join("")||"All good ✅"}`;
+}
+function renderRegister(code){if(!code) return; let list=document.getElementById("registerList"); list.innerHTML=data[code].learners.map((l,i)=>`<div class="row"><span>${l.name} - Final ${getLearnerFinal(l)}%</span><label><input type="checkbox" ${l.present?'checked':''} onchange="data['${code}'].learners[${i}].present=this.checked"> Present</label></div>`).join("");}
+function renderTracker(){document.getElementById("trackerList").innerHTML=["Term 1 - Numbers","Term 2 - Algebra","Term 3 - Geometry - SA 104cm²","Term 4 - Data Handling + Exams"].map(tp=>`<div class="row"><span>${tp}</span><span style="background:#FFD600;padding:3px 8px;border-radius:10px">ATP 2024</span></div>`).join("");}
+function exportTermCSV(){
+ let csv="School,Grade,Section,Learner,T1,T2,T3,T4,Final,Avg,DBE Status,License\n";
+ Object.keys(data).forEach(code=>{data[code].learners.forEach(l=>{let f=getLearnerFinal(l); csv+=`${school},${data[code].grade},${data[code].sec},${l.name},${l.terms.T1},${l.terms.T2},${l.terms.T3},${l.terms.T4},${l.terms.final},${f},${getDBEStatus(f)},${isPro?'PRO':'FREE'}\n`;});});
+ let blob=new Blob([csv],{type:"text/csv"}), a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`${school}_Term_Marks_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+}
+function exportSAMS(){exportTermCSV();}
+function whatsappPrincipal(){let total=0,sum=0,count=0,prom=0; Object.keys(data).forEach(k=>{if(data[k].learners.length){total+=data[k].learners.length; sum+=data[k].avg; count++; if(data[k].avg>=40) prom++;}}); let msg=`*${school} - Principal Term Report V4*%0ATotal: ${total}%0AFinal Avg: ${count?Math.round(sum/count):0}%25%0APromoted: ${count?Math.round(prom/count*100):0}%25%0AClasses: ${count}/84%0ALink: ${location.href}`; window.open(`https://wa.me/?text=${msg}`,'_blank');}
 
 init();
 </script>
