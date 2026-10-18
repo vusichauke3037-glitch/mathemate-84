@@ -1,11 +1,168 @@
 <!DOCTYPE html>
-<html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Mathemate SA V5 - Tasks Per Term - Vusi</title>
-<style>*{box-sizing:border-box;font-family:Arial;margin:0}body{background:#F6F8FF}.hero{background:linear-gradient(135deg,#2D6BFF,#00C27A);color:#fff;padding:30px 20px;text-align:center}.card{background:#fff;border-radius:14px;padding:18px;margin:14px auto;max-width:900px;box-shadow:0 4px 20px rgba(0,0,0,.08)}.btn{display:inline-block;background:#2D6BFF;color:#fff;padding:10px 18px;border-radius:22px;font-weight:800;text-decoration:none;margin:4px}.btn-y{background:#FFD600;color:#222}.btn-g{background:#00C27A}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}.badge{background:#FFD600;color:#000;padding:3px 8px;border-radius:10px;font-size:11px;font-weight:800}</style></head><body>
-<div class="hero"><h1>MATHEMATE SA V5 PRO - TASKS PER TERM</h1><p>84 Classes • Term 1-4 Marks • CAPS Tasks SA 104cm² • Wordsworth High School Licensed</p>
-<div style="margin-top:12px"><a class="btn btn-y" href="mathemate-84/?v=5">🚀 Open V5 Demo - UNLOCKED</a> <a class="btn btn-g" href="#buy">Buy R2,500</a></div>
-<p style="margin-top:10px"><span class="badge">PRO UNLOCKED ✅</span> <span class="badge">5 learners Gr1A</span> <span class="badge">Tasks Per Term</span></p></div>
-<div class="card"><h3>🔥 LIVE: V5 Screenshot from your phone</h3><p><b>5 learners | 0% final | 0% promoted | 0 tasks</b> → After term marks → <b>62% Promoted +10XP</b><br>Gr 1A 5/40 Final 0% Retained → Enter T1-T4 → Promoted<br>Tasks: SA 104cm² Volume=60, SA 214cm², Fractions Pizza - per term</p><a class="btn" href="mathemate-84/?v=5">View V5 Live</a></div>
-<div class="card"><h2>What V5 Adds (Why schools pay)</h2><div class="grid"><div><b>📊 Term Marks T1-T4</b><br>Fast Excel-like table, auto Final, DBE Promoted/Progressed/Retained</div><div><b>📚 Tasks Per Term</b><br>Add SA 104, SA 214, CAPS codes per term, Do Task +XP, WhatsApp Task</div><div><b>🏫 84 Classes</b><br>Gr1-12 A-G 40 max, offline PWA, no data needed</div><div><b>📱 WhatsApp</b><br>Term report + Task report to parent in one click</div><div><b>📈 Principal Dash</b><br>Total learners, final avg, tasks per term count, top classes</div><div><b>💾 SA-SAMS CSV</b><br>Export with T1 T2 T3 T4 Final XP Tasks + License PRO</div></div></div>
-<div class="card" id="buy"><h2>Buy Lifetime License - R2,500 / school</h2><p><s>R5,000</s> <b>R2,500 once-off</b> - Unlimited teachers, 84 classes, Term 1-4 + Tasks, offline</p><p>1. Pay Paystack → 2. WhatsApp proof + School Name → 3. Get key MATHEMATE84-PRO-SCHOOL-2026 → 4. Unlock</p><a class="btn btn-y" href="https://paystack.com/pay/mathemate84-pro" style="font-size:18px">💳 Pay R2,500 Paystack</a> <a class="btn btn-g" href="https://wa.me/27780233263?text=Paid%20V5%20PRO%20for%20school">WhatsApp Vusi</a><p style="margin-top:8px;background:#FFF8D6;padding:8px;border-radius:8px">Test key: <code>PRO-2026-VUSI</code> - unlocks demo V5</p></div>
-<div style="text-align:center;padding:15px;color:#666"><small>©2026 Mathemate SA V5 • Wordsworth High School • 5 learners Gr1A • Tasks Per Term • Built Benoni • vusichauke3037-glitch.github.io</small></div>
-</body></html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mathemate SA V6 - Photo Tasks</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--blue:#2D6BFF;--green:#00C27A;--yellow:#FFD600;--bg:#F6F8FF;--red:#FF3B30}
+*{box-sizing:border-box;font-family:Arial}body{margin:0;background:var(--bg)}
+header{background:var(--blue);color:#fff;padding:10px;text-align:center;position:sticky;top:0;z-index:20}
+.card{background:#fff;border-radius:12px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);margin:6px 0}
+.btn{background:var(--blue);color:#fff;border:0;padding:8px 12px;border-radius:18px;font-weight:800;margin:2px;font-size:12px;cursor:pointer}
+.btn-g{background:var(--green)}.btn-y{background:var(--yellow);color:#222}.btn-r{background:var(--red)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:8px}
+.class-card{border-left:6px solid var(--blue);cursor:pointer}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:40;overflow:auto;padding:8px}
+.modal-box{background:#fff;border-radius:14px;padding:12px;max-width:900px;margin:10px auto}
+.term-input{width:52px;padding:7px;border-radius:8px;border:1px solid #ccc;text-align:center;font-weight:800}
+.row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee;gap:4px;flex-wrap:wrap}
+table{width:100%;border-collapse:collapse}th{background:var(--blue);color:#fff;padding:7px;font-size:11px}td{padding:4px;border:1px solid #ddd;font-size:12px}
+.task-card{border-left:6px solid var(--yellow);background:#FFFBE6;padding:8px;border-radius:8px;margin:6px 0}
+.photo-task{max-width:100%;border-radius:10px;border:2px solid #FFD600;max-height:250px}
+</style>
+</head>
+<body>
+<header>
+<input id="schoolName" placeholder="School Name" style="padding:10px;border-radius:8px;border:0;max-width:200px;width:60%"><button class="btn btn-y" onclick="saveSchool()">Save</button><br>
+<div style="margin:6px 0"><input id="licenseInput" placeholder="PRO-2026-VUSI" style="padding:8px;border-radius:8px;border:0;max-width:170px"><button class="btn btn-g" onclick="activateLicense()">Unlock</button> <span id="proBadge" style="background:#FFD600;color:#000;padding:3px 8px;border-radius:10px;font-size:11px">FREE</span></div>
+<h3 style="margin:4px 0">V6 - <span id="schoolLabel">My School</span> - PHOTO → TASKS PER TERM</h3>
+<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
+<button class="btn btn-y" onclick="showTab('classes')">84 Classes</button>
+<button class="btn" onclick="showTab('term')">📊 Terms</button>
+<button class="btn" onclick="showTab('tasks')" style="background:#00C27A">📚 Tasks / Term</button>
+<button class="btn" onclick="showTab('photo')" style="background:#FFD600;color:#222">📸 Photo→Task</button>
+<button class="btn" onclick="showTab('dash')">Dash</button>
+</div>
+</header>
+
+<div id="classesTab"><div style="padding:8px;font-size:13px"><b id="totalLearners">0</b> learners | <b id="avgAll">0%</b> | <b id="promoRate">0% promoted</b> | <span id="taskCount">0 tasks</span> <span id="photoCount">0 photos</span></div><div class="grid" id="classesGrid"></div></div>
+
+<div id="termTab" style="display:none;padding:10px"><h3>📊 Term Marks - <span id="termClassName">Select class</span> - <b id="activeTermLabel">Term 1</b></h3>
+<div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn btn-y" onclick="setActiveTerm(1)">T1</button><button class="btn btn-y" onclick="setActiveTerm(2)">T2</button><button class="btn btn-y" onclick="setActiveTerm(3)">T3</button><button class="btn btn-y" onclick="setActiveTerm(4)">T4</button><button class="btn btn-g" onclick="setActiveTerm('final')">Final</button></div>
+<div class="card" style="overflow:auto"><table><thead><tr><th>#</th><th>Learner</th><th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>Final</th><th>Avg</th><th>DBE</th></tr></thead><tbody id="termTableBody"></tbody></table></div><button class="btn btn-g" onclick="saveAllTerms()">💾 Save</button></div>
+
+<div id="tasksTab" style="display:none;padding:10px">
+<h3>📚 Tasks per Term - <span id="taskClassName">All</span> | Term <span id="taskTermLabel">1</span></h3>
+<div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn btn-y" onclick="setTaskTerm(1)">Term 1</button><button class="btn btn-y" onclick="setTaskTerm(2)">Term 2</button><button class="btn btn-y" onclick="setTaskTerm(3)">Term 3</button><button class="btn btn-y" onclick="setTaskTerm(4)">Term 4</button><button class="btn btn-g" onclick="openAddTask()">+ Text Task</button><button class="btn" style="background:#FFD600;color:#222" onclick="showTab('photo')">+ Photo Task</button></div>
+<div id="taskList"></div>
+<div class="card"><h4>SA Task Bank</h4><div id="taskBankList"></div></div>
+</div>
+
+<div id="photoTab" style="display:none;padding:10px">
+<h3>📸 Photo → Auto Task - Take photo of exercise → Creates Task for Term <span id="photoTermLabel">1</span></h3>
+<div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn btn-y" onclick="setPhotoTerm(1)">Photo Term 1</button><button class="btn btn-y" onclick="setPhotoTerm(2)">Term 2</button><button class="btn btn-y" onclick="setPhotoTerm(3)">Term 3</button><button class="btn btn-y" onclick="setPhotoTerm(4)">Term 4</button></div>
+<div class="card" style="text-align:center">
+<input type="file" id="photoInput" accept="image/*" capture="environment" style="display:none" onchange="handlePhoto(this)">
+<button class="btn" style="background:#FFD600;color:#222;padding:15px 25px;font-size:16px" onclick="document.getElementById('photoInput').click()">📸 TAKE PHOTO OF EXERCISE BOOK</button>
+<p><small>Photo of SA 104cm², Fractions, etc → becomes Task</small></p>
+<div id="photoPreview"></div>
+<div id="photoForm" style="display:none;text-align:left;margin-top:10px">
+<label>Detected / Enter Question</label><input id="photoQ" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc" placeholder="SA 104cm² Volume?">
+<label>Answer</label><input id="photoA" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc" placeholder="60">
+<label>Grade</label><select id="photoGrade" style="width:100%;padding:10px;border-radius:8px"><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+<label>Code</label><input id="photoCode" style="width:100%;padding:10px;border-radius:8px" placeholder="SA 104 / 5.1.3">
+<button class="btn btn-g" onclick="savePhotoTask()">💾 Save Photo Task to Term <span id="savePhotoTerm">1</span> + Offline</button>
+</div>
+</div>
+<div id="photoTaskList"></div>
+</div>
+
+<div id="dashTab" style="display:none;padding:10px"><div id="dashContent"></div></div>
+
+<div id="classModal" class="modal"><div class="modal-box"><h3 id="modalTitle"></h3><div style="display:flex;gap:6px"><input id="newLearnerName" placeholder="Learner Name" style="flex:1"><button class="btn btn-g" onclick="addLearner()">Add</button><button class="btn btn-r" onclick="closeModal()">X</button></div><div id="modalLearners" style="margin-top:10px"></div></div></div>
+
+<div id="addTaskModal" class="modal"><div class="modal-box"><h3>Add Text Task Term <span id="addTaskTerm">1</span></h3><input id="taskTermInput" type="hidden"><input id="taskQInput" placeholder="Question" style="width:100%;padding:10px;border-radius:8px;margin:4px 0"><input id="taskAnsInput" placeholder="Answer" style="width:100%;padding:10px;border-radius:8px;margin:4px 0"><input id="taskCodeInput" placeholder="Code SA 104" style="width:100%;padding:10px;border-radius:8px"><button class="btn btn-g" onclick="saveNewTask()">Save</button> <button class="btn btn-r" onclick="closeAddTask()">Cancel</button></div></div>
+
+<script>
+const GRADES=[1,2,3,4,5,6,7,8,9,10,11,12], SECTIONS=["A","B","C","D","E","F","G"];
+let data=JSON.parse(localStorage.getItem("mathemate84_v6")||localStorage.getItem("mathemate84_v5")||localStorage.getItem("mathemate84_v4")||"{}");
+let school=localStorage.getItem("schoolName")||"My School", license=localStorage.getItem("proLicense")||"", isPro=false, currentClass=null, activeTerm=1, taskTerm=1, photoTerm=1;
+let tasks=JSON.parse(localStorage.getItem("mathemate_tasks_v6")||localStorage.getItem("mathemate_tasks_v5")||"[]");
+let currentPhotoBase64="";
+
+const BANK=[{id:1,term:1,grade:4,code:"SA 104",q:"SA 104cm² l=2 b=5 h=6 Volume?",a:"60"},{id:2,term:1,grade:5,code:"SA 214",q:"SA 214cm² Surface Area?",a:"214"},{id:3,term:2,grade:6,code:"6.2.1",q:"Solve 3x+8=23",a:"5"}];
+
+function init(){
+ document.getElementById("schoolName").value=school; document.getElementById("schoolLabel").textContent=school; checkLicense(); migrate();
+ GRADES.forEach(g=>SECTIONS.forEach(s=>{let code=g+s; if(!data[code]) data[code]={grade:g,sec:s,learners:[],avg:0};}));
+ save(); renderClasses(); renderDash(); renderBank(); renderPhotoTasks();
+ if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
+}
+function migrate(){Object.keys(data).forEach(c=>{data[c].learners.forEach(l=>{if(!l.terms) l.terms={T1:0,T2:0,T3:0,T4:0,final:0}; if(!l.completedTasks) l.completedTasks=[];});});}
+function save(){localStorage.setItem("mathemate84_v6",JSON.stringify(data)); localStorage.setItem("mathemate_tasks_v6",JSON.stringify(tasks));}
+function saveSchool(){school=document.getElementById("schoolName").value||"My School"; localStorage.setItem("schoolName",school); document.getElementById("schoolLabel").textContent=school;}
+function checkLicense(){isPro=license.startsWith("MATHEMATE84-PRO-")||license==="PRO-2026-VUSI"; document.getElementById("proBadge").textContent=isPro?"PRO UNLOCKED ✅":"FREE"; document.getElementById("proBadge").style.background=isPro?"#00C27A":"#FFD600"; document.getElementById("licenseInput").value=license;}
+function activateLicense(){let k=document.getElementById("licenseInput").value.trim(); if(k.startsWith("MATHEMATE84-PRO-")||k==="PRO-2026-VUSI"){localStorage.setItem("proLicense",k); license=k; checkLicense(); alert("✅ V6 Photo Tasks Unlocked"); renderClasses();} else alert("Use PRO-2026-VUSI");}
+function getFinal(l){if(l.terms.final>0) return l.terms.final; let vals=[l.terms.T1,l.terms.T2,l.terms.T3,l.terms.T4].filter(v=>v>0); return vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;}
+function getDBE(avg){if(avg>=40) return "Promoted"; if(avg>=30) return "Progressed"; return "Retained";}
+function countTotal(){let c=0; Object.keys(data).forEach(k=>c+=data[k].learners.length); return c;}
+function needPaywall(){return !isPro && countTotal()>=5;}
+
+function renderClasses(){
+ let grid=document.getElementById("classesGrid"); grid.innerHTML=""; let total=0,sum=0,count=0;
+ GRADES.forEach(g=>SECTIONS.forEach(s=>{
+  let code=g+s,c=data[code]; let classAvg=c.learners.length?Math.round(c.learners.reduce((a,b)=>a+getFinal(b),0)/c.learners.length):0; c.avg=classAvg;
+  if(c.learners.length){total+=c.learners.length; sum+=classAvg; count++;}
+  let d=document.createElement("div"); d.className="card class-card"; d.innerHTML=`<b>Gr ${g}${s}</b><br>${c.learners.length}/40<br>Final ${c.learners.length?classAvg+'%':'-'}<br><span style="background:#FFD600;padding:2px 8px;border-radius:10px;font-size:11px">${code}</span>`;
+  d.onclick=()=>openClass(code); grid.appendChild(d);
+ }));
+ document.getElementById("totalLearners").textContent=total; document.getElementById("avgAll").textContent=count?Math.round(sum/count)+"%":"0%"; document.getElementById("promoRate").textContent=count?Math.round(Object.values(data).filter(c=>c.avg>=40&&c.learners.length).length/count*100)+"% promoted":"0%";
+ document.getElementById("taskCount").textContent=tasks.length+" tasks"; document.getElementById("photoCount").textContent=tasks.filter(t=>t.photo).length+" photos";
+}
+function openClass(code){currentClass=code; let c=data[code]; document.getElementById("modalTitle").textContent=`${school} - ${code} - ${c.learners.length}/40`; document.getElementById("modalLearners").innerHTML=c.learners.map((l,i)=>`<div class="row"><span>${i+1}. ${l.name} - Final ${getFinal(l)}% ${getDBE(getFinal(l))}</span><button class="btn btn-r" onclick="removeLearner('${code}',${i})">x</button></div>`).join("")||"No learners"; document.getElementById("classModal").style.display="block"; document.getElementById("termClassName").textContent=code; document.getElementById("taskClassName").textContent=code; renderTermTable(code); renderTasks(); renderPhotoTasks();}
+function closeModal(){document.getElementById("classModal").style.display="none"; renderClasses(); renderDash();}
+function addLearner(){if(needPaywall()) return alert("Free limit 5. Use PRO-2026-VUSI"); let name=document.getElementById("newLearnerName").value.trim(); if(!name||!currentClass) return; if(data[currentClass].learners.length>=40) return alert("40 max"); data[currentClass].learners.push({id:Date.now(),name,terms:{T1:0,T2:0,T3:0,T4:0,final:0},completedTasks:[]}); save(); document.getElementById("newLearnerName").value=""; openClass(currentClass);}
+function removeLearner(code,i){data[code].learners.splice(i,1); save(); openClass(code);}
+function showTab(t){['classesTab','termTab','tasksTab','photoTab','dashTab'].forEach(id=>document.getElementById(id).style.display="none"); document.getElementById(t+'Tab').style.display="block"; if(t==='tasks') renderTasks(); if(t==='photo') renderPhotoTasks();}
+function setActiveTerm(term){activeTerm=term; document.getElementById("activeTermLabel").textContent=term==='final'?'Final':'Term '+term;}
+function renderTermTable(code){if(!code) code=currentClass; if(!code) return; let tbody=document.getElementById("termTableBody"); tbody.innerHTML=""; data[code].learners.forEach((l,i)=>{let f=getFinal(l); tbody.innerHTML+=`<tr><td>${i+1}</td><td>${l.name}</td><td><input class="term-input" value="${l.terms.T1}" onchange="updateTerm('${code}',${i},'T1',this.value)"></td><td><input class="term-input" value="${l.terms.T2}" onchange="updateTerm('${code}',${i},'T2',this.value)"></td><td><input class="term-input" value="${l.terms.T3}" onchange="updateTerm('${code}',${i},'T3',this.value)"></td><td><input class="term-input" value="${l.terms.T4}" onchange="updateTerm('${code}',${i},'T4',this.value)"></td><td><input class="term-input" value="${l.terms.final}" onchange="updateTerm('${code}',${i},'final',this.value)"></td><td>${f}%</td><td>${getDBE(f)}</td></tr>`;});}
+function updateTerm(code,i,term,val){let v=parseInt(val)||0; if(term==='final') data[code].learners[i].terms.final=v; else data[code].learners[i].terms[term]=v; save(); renderTermTable(code); renderClasses();}
+function saveAllTerms(){save(); alert("✅ Terms saved");}
+
+function setTaskTerm(t){taskTerm=t; document.getElementById("taskTermLabel").textContent=t; document.getElementById("addTaskTerm").textContent=t; renderTasks();}
+function openAddTask(){document.getElementById("taskTermInput").value=taskTerm; document.getElementById("addTaskModal").style.display="block";}
+function closeAddTask(){document.getElementById("addTaskModal").style.display="none";}
+function saveNewTask(){let q=document.getElementById("taskQInput").value,a=document.getElementById("taskAnsInput").value,code=document.getElementById("taskCodeInput").value||"TASK"; if(!q||!a) return alert("Add Q&A"); tasks.push({id:Date.now(),term:taskTerm,grade:currentClass?parseInt(currentClass):4,code,q,a,xp:10,class:currentClass||"All",school}); save(); closeAddTask(); renderTasks();}
+function renderTasks(){let list=document.getElementById("taskList"); let filtered=tasks.filter(t=>t.term==taskTerm); list.innerHTML=filtered.length?filtered.map(t=>`<div class="task-card"><b>Term ${t.term} - ${t.code} - ${t.class}</b><br>${t.q}<br>${t.photo?`<img src="${t.photo}" class="photo-task">`:''}<br><small>Ans: ${t.a} | +10XP</small><br><button class="btn btn-y" onclick="doTask(${t.id})">Do Task +10XP</button> <button class="btn btn-r" onclick="deleteTask(${t.id})">Delete</button></div>`).join(""):`No tasks Term ${taskTerm}`;}
+function renderBank(){document.getElementById("taskBankList").innerHTML=BANK.map(t=>`<div class="row"><span><b>${t.code}</b> ${t.q}</span><button class="btn btn-g" onclick="addBankTask(${t.id})">Add T${t.term}</button></div>`).join("");}
+function addBankTask(id){let b=BANK.find(x=>x.id==id); tasks.push({id:Date.now(),term:b.term,grade:b.grade,code:b.code,q:b.q,a:b.a,xp:10,class:currentClass||"All",school}); save(); renderTasks();}
+function doTask(id){if(!currentClass) return alert("Select class"); let t=tasks.find(x=>x.id==id); let ans=prompt(`${t.code}: ${t.q}`); if(ans!==null && ans.trim().toLowerCase()==t.a.toLowerCase()){let c=data[currentClass]; c.learners.forEach(l=>{l.completedTasks.push({taskId:id,xp:10});}); save(); alert(`✅ Correct! +10XP to ${c.learners.length} learners`);} else if(ans!==null) alert(`❌ Answer ${t.a}`);}
+function deleteTask(id){tasks=tasks.filter(x=>x.id!=id); save(); renderTasks(); renderPhotoTasks();}
+
+function setPhotoTerm(t){photoTerm=t; document.getElementById("photoTermLabel").textContent=t; document.getElementById("savePhotoTerm").textContent=t; document.getElementById("photoTermLabel").textContent=t;}
+function handlePhoto(input){
+ if(!input.files[0]) return;
+ let reader=new FileReader();
+ reader.onload=e=>{
+  currentPhotoBase64=e.target.result;
+  document.getElementById("photoPreview").innerHTML=`<img src="${currentPhotoBase64}" class="photo-task"><p><small>Photo loaded - compressed offline</small></p>`;
+  document.getElementById("photoForm").style.display="block";
+  document.getElementById("photoQ").value="SA Exercise from photo - Term "+photoTerm;
+  document.getElementById("photoCode").value="PHOTO T"+photoTerm;
+  // try simple auto guess if SA 104 in name
+  if(currentPhotoBase64.length>1000) document.getElementById("photoA").focus();
+ };
+ reader.readAsDataURL(input.files[0]);
+}
+function savePhotoTask(){
+ let q=document.getElementById("photoQ").value||"Photo Task", a=document.getElementById("photoA").value||"60", grade=parseInt(document.getElementById("photoGrade").value), code=document.getElementById("photoCode").value||"PHOTO";
+ if(!currentPhotoBase64) return alert("Take photo first");
+ if(!a) return alert("Enter answer");
+ tasks.push({id:Date.now(),term:photoTerm,grade,code,q,a,xp:15,photo:currentPhotoBase64,class:currentClass||"All",school});
+ save(); document.getElementById("photoPreview").innerHTML=""; document.getElementById("photoForm").style.display="none"; currentPhotoBase64=""; document.getElementById("photoInput").value="";
+ renderPhotoTasks(); renderTasks(); alert(`✅ Photo Task saved to Term ${photoTerm} - Offline - +15XP`);
+}
+function renderPhotoTasks(){
+ let list=document.getElementById("photoTaskList");
+ let photoTasks=tasks.filter(t=>t.photo);
+ list.innerHTML=photoTasks.length?`<h4>📸 Photo Tasks (${photoTasks.length})</h4>`+photoTasks.map(t=>`<div class="task-card"><b>Term ${t.term} - ${t.code} - ${t.class}</b> - Gr${t.grade}<br>${t.q}<br><img src="${t.photo}" class="photo-task"><br><small>Ans: ${t.a} | +${t.xp}XP | Photo offline</small><br><button class="btn btn-y" onclick="doTask(${t.id})">Do Photo Task</button> <button class="btn btn-r" onclick="deleteTask(${t.id})">Delete</button></div>`).join(""):`<div class="card">No photo tasks yet. Take photo above → becomes task per term.</div>`;
+}
+function renderDash(){
+ let total=0,sum=0,count=0; Object.keys(data).forEach(k=>{if(data[k].learners.length){total+=data[k].learners.length; sum+=data[k].avg; count++;}});
+ document.getElementById("dashContent").innerHTML=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><div class="card" style="text-align:center"><h2>${total}</h2><small>Learners</small></div><div class="card" style="text-align:center"><h2>${count?Math.round(sum/count):0}%</h2><small>Avg</small></div><div class="card" style="text-align:center"><h2>${tasks.length}</h2><small>Tasks</small></div></div><div class="card">Photo Tasks: ${tasks.filter(t=>t.photo).length} | Term1:${tasks.filter(t=>t.term==1).length} T2:${tasks.filter(t=>t.term==2).length} T3:${tasks.filter(t=>t.term==3).length} T4:${tasks.filter(t=>t.term==4).length}</div>`;
+}
+init();
+</script>
+</body>
+</html>
