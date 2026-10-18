@@ -3,14 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Mathemate SA V5 - Tasks</title>
+<title>Mathemate SA V5 - Tasks Per Term</title>
 <link rel="manifest" href="manifest.json">
 <style>
 :root{--blue:#2D6BFF;--green:#00C27A;--yellow:#FFD600;--bg:#F6F8FF;--red:#FF3B30}
 *{box-sizing:border-box;font-family:Arial} body{margin:0;background:var(--bg)}
 header{background:var(--blue);color:#fff;padding:10px;text-align:center;position:sticky;top:0;z-index:10}
 .card{background:#fff;border-radius:12px;padding:10px;box-shadow:0 2px 8px rgba(0,0,0,.1);margin:6px 0}
-.btn{background:var(--blue);color:#fff;border:0;padding:8px 12px;border-radius:18px;font-weight:800;margin:2px;font-size:12px}
+.btn{background:var(--blue);color:#fff;border:0;padding:8px 12px;border-radius:18px;font-weight:800;margin:2px;font-size:12px;cursor:pointer}
 .btn-g{background:var(--green)} .btn-y{background:var(--yellow);color:#222} .btn-r{background:var(--red)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px;padding:8px}
 .class-card{border-left:6px solid var(--blue);cursor:pointer}
@@ -18,76 +18,184 @@ header{background:var(--blue);color:#fff;padding:10px;text-align:center;position
 .modal-box{background:#fff;border-radius:14px;padding:12px;max-width:900px;margin:10px auto}
 .term-input{width:52px;padding:8px;border-radius:8px;border:1px solid #ccc;text-align:center;font-weight:800}
 .row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid #eee;gap:4px;flex-wrap:wrap}
-table{width:100%;border-collapse:collapse} th{background:var(--blue);color:#fff;padding:8px;font-size:11px} td{padding:4px;border:1px solid #ddd;font-size:12px}
+table{width:100%;border-collapse:collapse} th{background:var(--blue);color:#fff;padding:7px;font-size:11px} td{padding:4px;border:1px solid #ddd;font-size:12px}
 .avg-high{color:var(--green);font-weight:900} .avg-low{color:var(--red);font-weight:900}
-.task-card{border-left:6px solid var(--yellow);padding:8px;margin:4px 0;border-radius:8px;background:#fff8d6}
+.task-card{border-left:6px solid var(--yellow);background:#FFFBE6;padding:8px;border-radius:8px;margin:6px 0}
 </style>
 </head>
 <body>
 <header>
-<input id="schoolName" placeholder="School Name" style="padding:10px;border-radius:8px;border:0;max-width:240px;width:70%">
+<input id="schoolName" placeholder="School Name" style="padding:10px;border-radius:8px;border:0;max-width:240px;width:65%">
 <button class="btn btn-y" onclick="saveSchool()">Save School</button><br>
-<div style="margin:6px 0"><input id="licenseInput" placeholder="MATHEMATE84-PRO-..." style="padding:8px;border-radius:8px;border:0;max-width:220px"><button class="btn btn-g" onclick="activateLicense()">Unlock</button> <span id="proBadge" style="background:#FFD600;color:#000;padding:3px 8px;border-radius:10px;font-size:11px">FREE</span></div>
-<h3 style="margin:4px 0">MATHEMATE SA V5 - <span id="schoolLabel">My School</span> - TERM MARKS + TASKS</h3>
+<div style="margin:6px 0"><input id="licenseInput" placeholder="PRO-2026-VUSI" style="padding:8px;border-radius:8px;border:0;max-width:200px"><button class="btn btn-g" onclick="activateLicense()">Unlock</button> <span id="proBadge" style="background:#FFD600;color:#000;padding:3px 8px;border-radius:10px;font-size:11px">FREE</span></div>
+<h3 style="margin:4px 0">MATHEMATE SA V5 - <span id="schoolLabel">My School</span> - TASKS PER TERM</h3>
 <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:4px">
 <button class="btn btn-y" onclick="showTab('classes')">84 Classes</button>
-<button class="btn" onclick="showTab('term')" style="background:#FFD600;color:#222">📊 Term Marks</button>
-<button class="btn" onclick="showTab('tasks')">📚 CAPS Tasks</button>
+<button class="btn" onclick="showTab('term')">📊 Term Marks</button>
+<button class="btn" onclick="showTab('tasks')" style="background:#00C27A">📚 Tasks / Term</button>
 <button class="btn" onclick="showTab('dash')">Principal Dash</button>
 </div>
+<div style="margin-top:6px"><button class="btn" onclick="exportTermCSV()">Export Term CSV</button> <button class="btn btn-g" onclick="exportSAMS()">Export SA-SAMS</button></div>
 </header>
 
-<div id="classesTab"><div style="padding:8px;font-size:13px"><b id="totalLearners">0</b> learners | <b id="avgAll">0%</b> final avg | <b id="promoRate">0% promoted</b> | <span id="termInfo">Term 1-4 capturing</span></div><div class="grid" id="classesGrid"></div></div>
+<div id="classesTab"><div style="padding:8px;font-size:13px"><b id="totalLearners">0</b> learners | <b id="avgAll">0%</b> final | <b id="promoRate">0% promoted</b> | <span id="taskCount">0 tasks</span></div><div class="grid" id="classesGrid"></div></div>
 
 <div id="termTab" style="display:none;padding:10px">
-<h3>📊 Term Marks Capturing - <span id="termClassName">Select class</span></h3>
-<div style="display:flex;gap:6px;flex-wrap:wrap;margin:8px 0">
-<button class="btn btn-y" onclick="setActiveTerm(1)">Term 1</button>
-<button class="btn btn-y" onclick="setActiveTerm(2)">Term 2</button>
-<button class="btn btn-y" onclick="setActiveTerm(3)">Term 3</button>
-<button class="btn btn-y" onclick="setActiveTerm(4)">Term 4</button>
-<button class="btn btn-g" onclick="setActiveTerm('final')">Final</button>
-<span class="card" style="padding:6px 10px">Active: <b id="activeTermLabel">Term 1</b> | Quick type + Tab to next</span>
+<h3>📊 Term Marks - <span id="termClassName">Select class</span> - <b id="activeTermLabel">Term 1</b></h3>
+<div style="display:flex;gap:4px;flex-wrap:wrap;margin:8px 0">
+<button class="btn btn-y" onclick="setActiveTerm(1)">Term 1</button><button class="btn btn-y" onclick="setActiveTerm(2)">Term 2</button><button class="btn btn-y" onclick="setActiveTerm(3)">Term 3</button><button class="btn btn-y" onclick="setActiveTerm(4)">Term 4</button><button class="btn btn-g" onclick="setActiveTerm('final')">Final</button>
 </div>
-<div class="card" style="overflow:auto"><table id="termTable"><thead><tr><th>#</th><th>Learner</th><th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>Final</th><th>Avg</th><th>DBE</th><th>WA</th></tr></thead><tbody id="termTableBody"></tbody></table></div>
-<button class="btn btn-g" onclick="saveAllTerms()">💾 Save All Terms Offline</button> <button class="btn" onclick="whatsappTermReport()">WhatsApp Term Report</button>
+<div class="card" style="overflow:auto"><table><thead><tr><th>#</th><th>Learner</th><th>T1</th><th>T2</th><th>T3</th><th>T4</th><th>Final</th><th>Avg</th><th>DBE</th><th>WA</th></tr></thead><tbody id="termTableBody"></tbody></table></div>
+<button class="btn btn-g" onclick="saveAllTerms()">💾 Save Terms</button> <button class="btn" onclick="whatsappTermReport()">WhatsApp Report</button>
 </div>
 
 <div id="tasksTab" style="display:none;padding:10px">
-<h3>📚 CAPS Tasks - <span id="taskClassName">Select class</span></h3>
-<div style="margin:8px 0"><button class="btn btn-y" onclick="addTask()">+ New Task (SA 104cm², 214cm²...)</button></div>
-<div id="taskList"></div>
-<div class="card"><h4>Task Bank (30 SA tasks)</h4>
-<div id="taskBank"></div>
-<button class="btn" onclick="importTaskBank()">Import SA Tasks</button>
+<h3>📚 CAPS Tasks per Term - <span id="taskClassName">Select class</span> | Term <span id="taskTermLabel">1</span></h3>
+<div style="display:flex;gap:4px;flex-wrap:wrap">
+<button class="btn btn-y" onclick="setTaskTerm(1)">Term 1 Tasks</button><button class="btn btn-y" onclick="setTaskTerm(2)">Term 2</button><button class="btn btn-y" onclick="setTaskTerm(3)">Term 3</button><button class="btn btn-y" onclick="setTaskTerm(4)">Term 4</button>
+<button class="btn btn-g" onclick="openAddTask()">+ Add SA Task</button>
+</div>
+<div id="taskList" style="margin-top:10px"></div>
+<div class="card">
+<h4>SA CAPS Task Bank (ATP 2024) - Click to add to Term</h4>
+<div id="taskBankList"></div>
 </div>
 </div>
 
-<div id="dashTab" style="display:none;padding:10px"><div id="dashContent"></div><button class="btn btn-g" onclick="whatsappPrincipal()">WhatsApp Principal - Term Report</button></div>
+<div id="dashTab" style="display:none;padding:10px"><div id="dashContent"></div></div>
 
 <div id="classModal" class="modal"><div class="modal-box"><h3 id="modalTitle"></h3>
-<div style="display:flex;gap:6px;margin:8px 0"><input id="newLearnerName" placeholder="Learner Full Name" style="flex:1"><button class="btn btn-g" onclick="addLearner()">Add 40 max</button><button class="btn btn-r" onclick="closeModal()">X</button></div>
-<div id="modalLearners"></div>
+<div style="display:flex;gap:6px"><input id="newLearnerName" placeholder="Learner Name" style="flex:1"><button class="btn btn-g" onclick="addLearner()">Add</button><button class="btn btn-r" onclick="closeModal()">X</button></div>
+<div id="modalLearners" style="margin-top:10px"></div>
+</div></div>
+
+<div id="addTaskModal" class="modal"><div class="modal-box">
+<h3>Add CAPS Task for Term <span id="addTaskTerm">1</span></h3>
+<label>Term</label><select id="taskTermInput" style="width:100%;padding:10px;border-radius:8px"><option value="1">Term 1</option><option value="2">Term 2</option><option value="3">Term 3</option><option value="4">Term 4</option></select>
+<label>Grade</label><select id="taskGradeInput" style="width:100%;padding:10px;border-radius:8px"><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select>
+<label>Topic Code (e.g. 5.1.3, 9.2.2, SA 104)</label><input id="taskCodeInput" placeholder="SA 104cm² / 5.1.3 Fractions">
+<label>Question</label><input id="taskQInput" placeholder="SA 104cm², l=2,b=5,h=6 Volume?">
+<label>Answer</label><input id="taskAnsInput" placeholder="60">
+<label>XP</label><input id="taskXPInput" type="number" value="10">
+<button class="btn btn-g" onclick="saveNewTask()">Save Task Offline</button> <button class="btn btn-r" onclick="closeAddTask()">Cancel</button>
 </div></div>
 
 <script>
-// ... (same data, init, save, etc as V4)
+const GRADES=[1,2,3,4,5,6,7,8,9,10,11,12], SECTIONS=["A","B","C","D","E","F","G"];
+let data=JSON.parse(localStorage.getItem("mathemate84_v5")||localStorage.getItem("mathemate84_v4")||localStorage.getItem("mathemate84_v3")||"{}");
+let school=localStorage.getItem("schoolName")||"My School";
+let license=localStorage.getItem("proLicense")||"", isPro=false, currentClass=null, activeTerm=1, taskTerm=1;
+let tasks=JSON.parse(localStorage.getItem("mathemate_tasks_v5")||"[]");
 
-// TASKS
-let tasks=[], taskBank=[
- {id:1,term:1,grade:4,desc:"SA 104cm² Volume",ans:"60",xp:10},
- {id:2,term:1,grade:5,desc:"SA 214cm² Surface Area",ans:"214",xp:10},
- {id:3,term:2,grade:6,desc:"SA 345cm² Perimeter",ans:"78",xp:10}
- // ... add 27 more SA tasks
+const BANK=[
+{id:1,term:1,grade:4,code:"SA 104",q:"SA 104cm², l=2,b=5,h=6. Volume?",a:"60",xp:10},
+{id:2,term:1,grade:5,code:"SA 214",q:"SA 214cm² (5x6x7) Surface Area?",a:"214",xp:10},
+{id:3,term:1,grade:5,code:"5.1.3",q:"Fraction Pizza: 3/8 ordered, 1/8+1/8 added. How many more?",a:"1/8",xp:10},
+{id:4,term:2,grade:6,code:"6.2.1",q:"Solve: 3x+8=23",a:"5",xp:10},
+{id:5,term:2,grade:9,code:"9.2.2",q:"Solve: 2x+5=19",a:"7",xp:10},
+{id:6,term:3,grade:7,code:"7.3.2",q:"Area of triangle b=8 h=6",a:"24",xp:10},
+{id:7,term:3,grade:10,code:"10.3.1",q:"Volume cylinder r=3 h=7 (pi=3.14)",a:"197.82",xp:15},
+{id:8,term:4,grade:12,code:"12.3.2",q:"Derivative 3x²",a:"6x",xp:15}
 ];
-function addTask(){
- if(needPaywall()) return alert("Free limit 5 learners. Unlock PRO with license key.");
- let desc=prompt("Task description (e.g. SA 104cm² Volume):");
- if(!desc) return;
- let ans=prompt("Correct answer:");
- if(!ans) return;
- let t=activeTerm==='final'?1:activeTerm, g=currentClass.split('')[0];
- tasks.push({id:Date.now(),term:t,grade:g,desc:desc,ans:ans,xp:10,created:new Date()});
- save(); renderTasks();
+
+function init(){
+ document.getElementById("schoolName").value=school; document.getElementById("schoolLabel").textContent=school;
+ checkLicense(); migrate();
+ GRADES.forEach(g=>SECTIONS.forEach(s=>{let code=g+s; if(!data[code]) data[code]={grade:g,sec:s,learners:[],avg:0};}));
+ save(); renderClasses(); renderDash(); renderBank();
+ if('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js');
 }
-function render
+function migrate(){
+ Object.keys(data).forEach(code=>{
+  data[code].learners.forEach(l=>{
+   if(l.mark!==undefined){ l.terms={T1:l.mark||0,T2:0,T3:0,T4:0,final:0}; delete l.mark; }
+   if(!l.terms) l.terms={T1:0,T2:0,T3:0,T4:0,final:0};
+   if(l.present===undefined) l.present=true;
+   if(!l.completedTasks) l.completedTasks=[];
+  });
+ });
+}
+function save(){localStorage.setItem("mathemate84_v5",JSON.stringify(data)); localStorage.setItem("mathemate_tasks_v5",JSON.stringify(tasks));}
+function saveSchool(){school=document.getElementById("schoolName").value||"My School"; localStorage.setItem("schoolName",school); document.getElementById("schoolLabel").textContent=school;}
+function checkLicense(){isPro=license.startsWith("MATHEMATE84-PRO-")||license==="PRO-2026-VUSI"; document.getElementById("proBadge").textContent=isPro?"PRO UNLOCKED ✅":"FREE - 5 max"; document.getElementById("proBadge").style.background=isPro?"#00C27A":"#FFD600"; document.getElementById("licenseInput").value=license;}
+function activateLicense(){let k=document.getElementById("licenseInput").value.trim(); if(k.startsWith("MATHEMATE84-PRO-")||k==="PRO-2026-VUSI"){localStorage.setItem("proLicense",k); license=k; checkLicense(); alert("✅ V5 PRO Unlocked - Tasks per Term active for "+school); renderClasses();} else alert("Invalid - Use PRO-2026-VUSI for test");}
+function getFinal(l){let t=l.terms; if(t.final>0) return t.final; let vals=[t.T1,t.T2,t.T3,t.T4].filter(v=>v>0); return vals.length?Math.round(vals.reduce((a,b)=>a+b,0)/vals.length):0;}
+function getDBE(avg){if(avg>=40) return "Promoted"; if(avg>=30) return "Progressed"; return "Retained";}
+function countTotal(){let c=0; Object.keys(data).forEach(k=>c+=data[k].learners.length); return c;}
+function needPaywall(){return !isPro && countTotal()>=5;}
+
+function renderClasses(){
+ let grid=document.getElementById("classesGrid"); grid.innerHTML=""; let total=0,sum=0,count=0,promoted=0;
+ GRADES.forEach(g=>SECTIONS.forEach(s=>{
+  let code=g+s,c=data[code]; let classAvg=c.learners.length?Math.round(c.learners.reduce((a,b)=>a+getFinal(b),0)/c.learners.length):0; c.avg=classAvg;
+  if(c.learners.length){total+=c.learners.length; sum+=classAvg; count++; if(classAvg>=40) promoted++;}
+  let d=document.createElement("div"); d.className="card class-card"; d.innerHTML=`<b>Gr ${g}${s}</b><br>${c.learners.length}/40<br>Final ${c.learners.length?classAvg+'%':'-'}<br><span style="background:#FFD600;padding:2px 8px;border-radius:10px;font-size:11px">${code}</span> <small>${c.learners.length?getDBE(classAvg):''}</small>`;
+  d.onclick=()=>openClass(code); grid.appendChild(d);
+ }));
+ document.getElementById("totalLearners").textContent=total; document.getElementById("avgAll").textContent=count?Math.round(sum/count)+"%":"0%"; document.getElementById("promoRate").textContent=count?Math.round(promoted/count*100)+"% promoted":"0%"; document.getElementById("taskCount").textContent=tasks.length+" tasks";
+}
+function openClass(code){
+ currentClass=code; let c=data[code]; document.getElementById("modalTitle").textContent=`${school} - ${code} - ${c.learners.length}/40 - Final ${c.avg}%`;
+ document.getElementById("modalLearners").innerHTML=c.learners.map((l,i)=>{let f=getFinal(l); return `<div class="row"><span>${i+1}. ${l.name} - T1:${l.terms.T1} T2:${l.terms.T2} T3:${l.terms.T3} T4:${l.terms.T4} Final:${f}% ${getDBE(f)} - XP:${(l.completedTasks||[]).length*10}</span><div><button class="btn" onclick="editTerms('${code}',${i})">Terms</button><button class="btn btn-y" onclick="showTab('tasks');openClass('${code}')">Tasks</button><button class="btn btn-r" onclick="removeLearner('${code}',${i})">x</button></div></div>`}).join("")||"No learners";
+ document.getElementById("classModal").style.display="block"; document.getElementById("termClassName").textContent=code; document.getElementById("taskClassName").textContent=code; renderTermTable(code); renderTasks();
+}
+function closeModal(){document.getElementById("classModal").style.display="none"; renderClasses(); renderDash();}
+function addLearner(){if(needPaywall()) return alert("Free limit 5. Unlock PRO with PRO-2026-VUSI"); let name=document.getElementById("newLearnerName").value.trim(); if(!name||!currentClass) return; if(data[currentClass].learners.length>=40) return alert("40 max"); data[currentClass].learners.push({id:Date.now(),name,terms:{T1:0,T2:0,T3:0,T4:0,final:0},present:true,completedTasks:[]}); save(); document.getElementById("newLearnerName").value=""; openClass(currentClass);}
+function removeLearner(code,i){data[code].learners.splice(i,1); save(); openClass(code);}
+function editTerms(code,i){showTab('term'); renderTermTable(code);}
+function showTab(t){['classesTab','termTab','tasksTab','dashTab'].forEach(id=>document.getElementById(id).style.display="none"); document.getElementById(t+'Tab').style.display="block"; if(t==='tasks') renderTasks();}
+function setActiveTerm(term){activeTerm=term; document.getElementById("activeTermLabel").textContent=term==='final'?'Final':`Term ${term}`;}
+function renderTermTable(code){if(!code) code=currentClass; if(!code) return; let c=data[code],tbody=document.getElementById("termTableBody"); tbody.innerHTML=""; c.learners.forEach((l,i)=>{let f=getFinal(l); tbody.innerHTML+=`<tr><td>${i+1}</td><td><b>${l.name}</b></td>
+<td><input class="term-input" type="number" value="${l.terms.T1}" onchange="updateTerm('${code}',${i},'T1',this.value)"></td>
+<td><input class="term-input" type="number" value="${l.terms.T2}" onchange="updateTerm('${code}',${i},'T2',this.value)"></td>
+<td><input class="term-input" type="number" value="${l.terms.T3}" onchange="updateTerm('${code}',${i},'T3',this.value)"></td>
+<td><input class="term-input" type="number" value="${l.terms.T4}" onchange="updateTerm('${code}',${i},'T4',this.value)"></td>
+<td><input class="term-input" type="number" value="${l.terms.final}" onchange="updateTerm('${code}',${i},'final',this.value)"></td>
+<td class="${f>=40?'avg-high':'avg-low'}">${f}%</td><td>${getDBE(f)}</td><td><button class="btn" onclick="whatsappLearner('${code}',${i})">WA</button></td></tr>`;});}
+function updateTerm(code,i,term,val){let v=parseInt(val)||0; if(v>100) v=100; if(term==='final') data[code].learners[i].terms.final=v; else data[code].learners[i].terms[term]=v; save(); renderTermTable(code); renderClasses();}
+function saveAllTerms(){save(); alert("✅ Terms saved - SA-SAMS ready");}
+function whatsappLearner(code,i){let l=data[code].learners[i],f=getFinal(l); window.open(`https://wa.me/?text=${encodeURIComponent(`${school} - ${code}: ${l.name} - T1:${l.terms.T1} T2:${l.terms.T2} T3:${l.terms.T3} T4:${l.terms.T4} Final:${f}% ${getDBE(f)} - Mathemate V5`)}`,'_blank');}
+function whatsappTermReport(){if(!currentClass) return alert("Select class"); let c=data[currentClass],msg=`*${school} - ${currentClass} Term Report*%0A`; c.learners.slice(0,15).forEach(l=>{msg+=`${l.name}: T1 ${l.terms.T1} T2 ${l.terms.T2} T3 ${l.terms.T3} T4 ${l.terms.T4} Final ${getFinal(l)}% - ${getDBE(getFinal(l))}%0A`;}); window.open(`https://wa.me/?text=${msg}`,'_blank');}
+
+// TASKS PER TERM
+function setTaskTerm(t){taskTerm=t; document.getElementById("taskTermLabel").textContent=t; document.getElementById("addTaskTerm").textContent=t; renderTasks();}
+function openAddTask(){document.getElementById("taskTermInput").value=taskTerm; document.getElementById("addTaskModal").style.display="block";}
+function closeAddTask(){document.getElementById("addTaskModal").style.display="none";}
+function saveNewTask(){
+ let term=parseInt(document.getElementById("taskTermInput").value), grade=parseInt(document.getElementById("taskGradeInput").value), code=document.getElementById("taskCodeInput").value||`SA ${Date.now()%1000}`, q=document.getElementById("taskQInput").value, a=document.getElementById("taskAnsInput").value, xp=parseInt(document.getElementById("taskXPInput").value)||10;
+ if(!q||!a) return alert("Add question and answer");
+ tasks.push({id:Date.now(),term,grade,code,q,a,xp,class:currentClass||"All",school});
+ save(); closeAddTask(); renderTasks(); alert("✅ Task added for Term "+term+" - SA-SAMS linked");
+ document.getElementById("taskCodeInput").value=""; document.getElementById("taskQInput").value=""; document.getElementById("taskAnsInput").value="";
+}
+function renderTasks(){
+ let list=document.getElementById("taskList"); if(!list) return;
+ let filtered=tasks.filter(t=>t.term==taskTerm && (!currentClass || t.class===currentClass || t.class==="All" || t.grade==currentClass?.match(/\d+/)?.[0]));
+ if(!currentClass) filtered=tasks.filter(t=>t.term==taskTerm);
+ list.innerHTML=filtered.length?filtered.map(t=>`<div class="task-card"><b>Term ${t.term} - ${t.code} - Gr${t.grade}</b> - ${t.class}<br>${t.q}<br><small>Ans: ${t.a} | +${t.xp}XP | ${t.school||school}</small><br><button class="btn btn-y" onclick="doTask(${t.id})">Do Task +${t.xp}XP</button> <button class="btn" onclick="whatsappTask(${t.id})">WhatsApp Task</button> <button class="btn btn-r" onclick="deleteTask(${t.id})">Delete</button></div>`).join(""):`<div class="card">No tasks for Term ${taskTerm} ${currentClass?'- '+currentClass:''}. Add SA tasks above or from bank below.</div>`;
+}
+function renderBank(){document.getElementById("taskBankList").innerHTML=BANK.map(t=>`<div class="row"><span><b>Term ${t.term} - ${t.code}</b> - Gr${t.grade} - ${t.q} (Ans ${t.a})</span><button class="btn btn-g" onclick="addBankTask(${t.id})">Add to Term ${t.term}</button></div>`).join("");}
+function addBankTask(id){let b=BANK.find(x=>x.id==id); tasks.push({id:Date.now(),term:b.term,grade:b.grade,code:b.code,q:b.q,a:b.a,xp:b.xp,class:currentClass||"All",school}); save(); renderTasks(); alert("Added: "+b.code+" to Term "+b.term);}
+function doTask(id){if(!currentClass) return alert("Select class first"); let t=tasks.find(x=>x.id==id); let ans=prompt(`Task Term ${t.term} - ${t.code}: ${t.q}`); if(ans===null) return; if(ans.trim().toLowerCase()==t.a.toLowerCase()){ // give XP to all learners in class or ask
+  let c=data[currentClass]; if(c.learners.length){ c.learners.forEach(l=>{ if(!l.completedTasks) l.completedTasks=[]; l.completedTasks.push({taskId:id,date:new Date().toISOString(),xp:t.xp}); }); save(); alert(`✅ Correct! +${t.xp}XP given to ${c.learners.length} learners in ${currentClass} - Term ${t.term}`); openClass(currentClass); } else alert("No learners in class");
+ } else alert(`❌ Try again. Hint answer: ${t.a}`);}
+function whatsappTask(id){let t=tasks.find(x=>x.id==id); let msg=`${school} - Term ${t.term} - ${t.code} - Gr${t.grade} - Task: ${t.q} - Do for +${t.xp}XP - Mathemate V5`; window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,'_blank');}
+function deleteTask(id){tasks=tasks.filter(x=>x.id!=id); save(); renderTasks();}
+
+function renderDash(){
+ let total=0,sum=0,count=0,prom=0,arr=[]; Object.keys(data).forEach(code=>{let c=data[code]; if(c.learners.length){let avg=c.avg; total+=c.learners.length; sum+=avg; count++; if(avg>=40) prom++; arr.push({code,avg,count:c.learners.length,tasks:tasks.filter(t=>t.class===code).length});}});
+ arr.sort((a,b)=>b.avg-a.avg);
+ document.getElementById("dashContent").innerHTML=`<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><div class="card" style="text-align:center"><h2>${total}</h2><small>Learners</small></div><div class="card" style="text-align:center"><h2>${count?Math.round(sum/count):0}%</h2><small>Final Avg</small></div><div class="card" style="text-align:center"><h2>${tasks.length}</h2><small>Tasks Term 1-4</small></div></div>
+ <h4>Top Classes</h4>${arr.slice(0,5).map(x=>`<div class="row"><span>${school} ${x.code} - ${x.avg}% (${x.count} learners) - ${x.tasks} tasks</span><span>${getDBE(x.avg)}</span></div>`).join("")||"No data"}<h4>Tasks per Term</h4><div class="card">Term1: ${tasks.filter(t=>t.term==1).length} | Term2: ${tasks.filter(t=>t.term==2).length} | Term3: ${tasks.filter(t=>t.term==3).length} | Term4: ${tasks.filter(t=>t.term==4).length}</div>`;
+}
+function exportTermCSV(){
+ let csv="School,Grade,Section,Learner,T1,T2,T3,T4,Final,Avg,DBE,XP Tasks,License\n";
+ Object.keys(data).forEach(code=>{data[code].learners.forEach(l=>{let f=getFinal(l); csv+=`${school},${data[code].grade},${data[code].sec},${l.name},${l.terms.T1},${l.terms.T2},${l.terms.T3},${l.terms.T4},${l.terms.final},${f},${getDBE(f)},${(l.completedTasks||[]).length},${isPro?'PRO':'FREE'}\n`;});});
+ let blob=new Blob([csv],{type:"text/csv"}),a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=`${school}_Term_Tasks_V5_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+}
+function exportSAMS(){exportTermCSV();}
+
+init();
+</script>
+</body>
+</html>
